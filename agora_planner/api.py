@@ -28,6 +28,7 @@ from rdflib import RDF
 from agora_planner.plan.agp import AgoraGP, prefixes_dict
 from agora_planner.plan import fountain
 from flask import request, make_response, jsonify
+from flask_negotiate import produces
 from agora_planner.server import app
 from agora_planner.plan.graph import graph_plan
 
@@ -128,6 +129,7 @@ def object_join(tp_paths, graph, tp1, tp2):
 
 
 @app.route('/plan')
+@produces('application/json', 'text/turtle', 'text/html')
 def get_plan():
     def shorten_part(part, graph):
         if part.startswith('?'):
@@ -192,14 +194,12 @@ def get_plan():
     ugp = gp.graph
     paths = get_tp_paths(ugp)
 
-    # print ugp.serialize(format='turtle')
-
     plan = {"plan": [{"context": get_context(tp, ugp), "pattern": tp, "paths": path}
                      for (tp, path) in paths.items()], "prefixes": prefixes_dict}
 
-    # return jsonify(plan)
-
-    # print plan
+    mimetypes = str(request.accept_mimetypes).split(',')
+    if 'application/json' in mimetypes:
+        return jsonify(plan)
 
     g_plan = graph_plan(plan)
 
