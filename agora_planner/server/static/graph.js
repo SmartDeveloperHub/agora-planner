@@ -11,53 +11,63 @@ $(function () { // on dom ready
             .selector('node')
             .css({
                 'content': 'data(label)',
-                'color': '#d0d0d0',
+                'color': '#343435',
                 'shape': 'data(shape)',
-                'width': 'mapData(width, 1, 150, 1, 150)',
+                'width': 'mapData(width, 1, 200, 1, 200)',
                 'height': '40',
                 'text-valign': 'center',
-                'text-outline-width': 2,
-                'text-outline-color': '#303030',
-                'background-color': '#303030'
+                'background-color': 'white',
+                'font-weight': 'regular',
+                'visibility': 'hidden'
             })
             .selector('edge')
             .css({
                 'target-arrow-shape': 'triangle',
                 'width': 3,
-                'line-color': '#555',
-                'target-arrow-color': '#aaa',
+                'line-color': '#343435',
+                'target-arrow-color': '#343435',
                 'content': 'data(label)',
-                'color': '#e0e0e0'
-            })
-            .selector('node.highlighted')
+                'color': 'white',
+                'edge-text-rotation': 'autorotate',
+                'text-valign': 'top',
+                'text-wrap': 'wrap',
+                'text-background-color': '#343435',
+                'text-background-shape': 'roundrectangle',
+                'curve-style': 'bezier',
+                'visibility': 'hidden'
+            }).selector('node.highlighted')
             .css({
-                'background-color': '#037',
-                'transition-property': 'background-color, line-color, target-arrow-color, color',
+                //'background-color': '#037',
+                'transition-property': 'background-color, line-color, target-arrow-color, color, border-width, shadow-color, visibility',
                 'transition-duration': '0.5s',
-                'color': 'white'
-            }).selector('edge.subclass')
+                'color': '#343435',
+                'border-width': 3,
+                'border-opacity': 0.7,
+                'font-weight': 'regular',
+                'shadow-color': '#101010',
+                'shadow-opacity': 0.5,
+                'shadow-offset-x': 4,
+                'shadow-offset-y': 3,
+                'shadow-blur': 2,
+                'visibility': 'visible'
+            }).selector('edge.highlighted')
             .css({
-                'line-style': 'dashed',
-                'source-arrow-shape': 'triangle',
-                'source-arrow-fill': 'hollow',
-                'target-arrow-shape': 'none'
+                'transition-property': 'visibility',
+                'transition-duration': '0.5s',
+                'visibility': 'visible'
             }).selector('node.seed')
             .css({
-                'border-color': '#08f',
-                'border-width': 5,
-                'border-opacity': 0.7
-                //'background-color': '#06a'
+                'border-color': '#0085ca',
+                'shadow-color': '#0085ca'
             }).selector('edge.end')
             .css({
                 'line-color': '#2a2',
                 'target-arrow-color': '#292',
-                'color': 'white'
+                'text-background-color': '#292'
             }).selector('node.end')
             .css({
                 'border-color': '#2a2',
-                'border-width': 5,
-                'border-opacity': 0.7,
-                'background-color': '#037'
+                'shadow-color': '#2a2'
             }),
 
         elements: {
@@ -115,6 +125,7 @@ $(function () { // on dom ready
         cy.bfs.push(
             {
                 index: index,
+                successors: cy.nodes().successors(),
                 bfs: cy.elements().bfs('#' + vGraph.roots[index], function () {
                 }, true)
             }
@@ -122,9 +133,10 @@ $(function () { // on dom ready
     });
 
     var highlightNextEle = function (b) {
-        b.bfs.path[b.index].addClass('highlighted');
-
-        if (b.index < b.bfs.path.length) {
+        b.successors[b.index].addClass('highlighted');
+        //b.bfs.path[b.index].addClass('highlighted');
+        console.log(b.successors);
+        if (b.index < b.successors.length) {
             b.index++;
             setTimeout(function () {
                 highlightNextEle(b);
@@ -139,3 +151,9 @@ $(function () { // on dom ready
 
 
 }); // on dom ready
+
+$(document).ready(function() {
+    tps.forEach(function (tp) {
+        $("#tps").append('<p>' + tp + ' .</p>')
+    });
+});

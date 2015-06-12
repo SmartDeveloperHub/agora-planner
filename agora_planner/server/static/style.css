@@ -1,5 +1,7 @@
 body {
-  font: 14px helvetica neue, helvetica, arial, sans-serif;
+    font: 14px helvetica neue, helvetica, arial, sans-serif;
+    background-image: url("paper.jpg");
+    background-repeat: repeat;
 }
 
 #cy {
@@ -8,4 +10,20 @@ body {
   position: absolute;
   left: 0;
   top: 0;
+}
+
+#agp-panel {
+  position: absolute;
+  color: whitesmoke;
+  padding: 6px 15px 6px 15px;
+  background-color: rgba(38, 38, 38, 0.5);
+  border-radius: 10px;
+}
+
+#title {
+  margin-top: 5px;
+}
+
+#tps  {
+  font-family: monospace;
 }

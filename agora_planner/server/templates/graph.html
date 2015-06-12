@@ -13,11 +13,17 @@
             edges: {{ edges | safe }},
             roots: {{ roots | safe }}
         };
-        console.log(vGraph)
+        var tps = {{ tps | safe }};
+        console.log(vGraph);
+        console.log(tps);
     </script>
-    <script src={{ url_for('static', filename='graph-path.js') }}></script>
+    <script src={{ url_for('static', filename='graph.js') }}></script>
 </head>
-<body style="background-color: #012">
+<body>
 <div id="cy"></div>
+<div id="agp-panel">
+    <h2 id="title">Agora Graph Pattern</h2>
+    <div id="tps"></div>
+</div>
 </body>
 </html>
