@@ -82,10 +82,10 @@ def graph_plan(plan):
 
         previous_node = b_tree
         __inc_tree_length(b_tree, len(p_steps))
-        for step in p_steps:
+        for j, step in enumerate(p_steps):
             prop = step.get('property')
             b_node = BNode(previous_node.n3() + prop)
-            if i < len(p_steps) - 1 or pattern[1] == RDF.type:
+            if j < len(p_steps) - 1 or pattern[1] == RDF.type:
                 path_g.add((b_node, AGORA.onProperty, __extend_uri(prefixes, prop)))
             path_g.add((b_node, AGORA.expectedType, __extend_uri(prefixes, step.get('type'))))
             path_g.add((previous_node, AGORA.next, b_node))
