@@ -1,29 +1,98 @@
+@font-face {
+    font-family: AnnieUseYourTelescope;
+    src: url("Annie_Use_Your_Telescope.eot?") format("eot"), url("Annie_Use_Your_Telescope.woff") format("woff"), url("Annie_Use_Your_Telescope.ttf") format("truetype"), url("Annie_Use_Your_Telescope.svg#AnnieUseYourTelescope") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: ank;
+    src: url("ank.eot?") format("eot"), url("ank.woff") format("woff"), url("ank.ttf") format("truetype"), url("ank.svg#ank*") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: LoveYaLikeASister;
+    src: url("LoveYaLikeASister.eot?") format("eot"), url("LoveYaLikeASister.woff") format("woff"), url("LoveYaLikeASister.ttf") format("truetype"), url("LoveYaLikeASister.svg#LoveYaLikeASister") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: JoseFernandez;
+    src: url("JoseFernandez.eot?") format("eot"), url("JoseFernandez.woff") format("woff"), url("JoseFernandez.ttf") format("truetype"), url("JoseFernandez.svg#JoseFernandez") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: DesignerNotes;
+    src: url("Designer-Notes.eot?") format("eot"), url("Designer-Notes.woff") format("woff"), url("Designer-Notes.ttf") format("truetype"), url("Designer-Notes.svg#DesignerNotes") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: EagerNaturalist;
+    src: url("eager.eot?") format("eot"), url("eager.woff") format("woff"), url("eager.ttf") format("truetype"), url("eager.svg#EagerNaturalist") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
-    font: 14px helvetica neue, helvetica, arial, sans-serif;
+    font-family: EagerNaturalist, sans-serif;
     background-image: url("paper.jpg");
     background-repeat: repeat;
+    color: #484849;
 }
 
 #cy {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 #agp-panel {
-  position: absolute;
-  color: whitesmoke;
-  padding: 6px 15px 6px 15px;
-  background-color: rgba(38, 38, 38, 0.5);
-  border-radius: 10px;
+    position: absolute;
+    /*padding: 6px 15px 6px 15px;*/
+    background-image: url('post-it.png');
+    width: 250px;
+    height: 250px;
+    background-repeat: no-repeat;
 }
 
 #title {
-  margin-top: 5px;
+    margin: 13px;
+    text-align: center;
+    font-size: 1.4em;
+    -webkit-transform: rotate(2deg);
+    -moz-transform: rotate(2deg);
+    -o-transform: rotate(2deg);
 }
 
-#tps  {
-  font-family: monospace;
+#tps {
+    font-family: EagerNaturalist, sans-serif;
+    -webkit-transform: rotate(2deg);
+    -moz-transform: rotate(2deg);
+    -o-transform: rotate(2deg);
+}
+
+#brand {
+    position: absolute;
+    right: 0;
+    margin: 15px;
+    bottom: 0;
+    font-family: LoveYaLikeASister;
+    font-size: 24px;
+    opacity: 0.4;
+    z-index: -1;
+}
+
+p {
+    margin: 7px;
+    font-size: 18px;
+    padding-left: 10%;
 }

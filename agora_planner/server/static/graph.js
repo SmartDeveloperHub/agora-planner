@@ -11,63 +11,73 @@ $(function () { // on dom ready
             .selector('node')
             .css({
                 'content': 'data(label)',
-                'color': '#343435',
+                'color': '#484849',
                 'shape': 'data(shape)',
                 'width': 'mapData(width, 1, 200, 1, 200)',
                 'height': '40',
                 'text-valign': 'center',
                 'background-color': 'white',
+                'background-opacity': 0.2,
                 'font-weight': 'regular',
-                'visibility': 'hidden'
+                'visibility': 'hidden',
+                'font-family': 'EagerNaturalist',
+                'font-size': '22px'
             })
             .selector('edge')
             .css({
                 'target-arrow-shape': 'triangle',
-                'width': 3,
-                'line-color': '#343435',
-                'target-arrow-color': '#343435',
+                //'width': 3,
+                'line-color': '#484849',
+                'target-arrow-color': '#484849',
                 'content': 'data(label)',
-                'color': 'white',
+                'color': '#484849',
                 'edge-text-rotation': 'autorotate',
                 'text-valign': 'top',
                 'text-wrap': 'wrap',
-                'text-background-color': '#343435',
-                'text-background-shape': 'roundrectangle',
                 'curve-style': 'bezier',
-                'visibility': 'hidden'
+                'visibility': 'hidden',
+                'font-family': 'EagerNaturalist',
+                'font-size': '18px'
             }).selector('node.highlighted')
             .css({
-                //'background-color': '#037',
                 'transition-property': 'background-color, line-color, target-arrow-color, color, border-width, shadow-color, visibility',
-                'transition-duration': '0.5s',
-                'color': '#343435',
-                'border-width': 3,
+                'transition-duration': '0.8s',
+                'color': '#484849',
+                'border-width': 2,
                 'border-opacity': 0.7,
                 'font-weight': 'regular',
-                'shadow-color': '#101010',
+                'shadow-color': '#484849',
                 'shadow-opacity': 0.5,
-                'shadow-offset-x': 4,
-                'shadow-offset-y': 3,
+                'shadow-offset-x': 0,
+                'shadow-offset-y': 0,
                 'shadow-blur': 2,
                 'visibility': 'visible'
             }).selector('edge.highlighted')
             .css({
-                'transition-property': 'visibility',
-                'transition-duration': '0.5s',
+                'transition-property': 'line-color, target-arrow-color, color, border-width, shadow-color, visibility',
+                'transition-duration': '0.8s',
                 'visibility': 'visible'
             }).selector('node.seed')
             .css({
-                'border-color': '#0085ca',
-                'shadow-color': '#0085ca'
+                'border-color': '#0078B6',
+                'shadow-color': '#0078B6',
+                'visibility': 'visible',
+                'color': '#0078B6'
             }).selector('edge.end')
             .css({
-                'line-color': '#2a2',
-                'target-arrow-color': '#292',
-                'text-background-color': '#292'
+                'line-color': '#1F8A1F',
+                'color': '#1F8A1F',
+                'target-arrow-color': '#1F8A1F',
+                'text-shadow-color': '#1F8A1F',
+                'text-shadow-opacity': 0.5,
+                'text-shadow-offset-x': 0,
+                'text-shadow-offset-y': 0,
+                'text-shadow-blur': 2
             }).selector('node.end')
             .css({
-                'border-color': '#2a2',
-                'shadow-color': '#2a2'
+                'border-color': '#1F8A1F',
+                'shadow-color': '#1F8A1F',
+                'color': '#1F8A1F'
             }),
 
         elements: {
@@ -91,8 +101,8 @@ $(function () { // on dom ready
         stop: undefined, // callback on layoutstop
 
         // forces used by arbor (use arbor default on undefined)
-        repulsion: 2000,
-        stiffness: undefined,
+        repulsion: 50,
+        stiffness: 100,
         friction: 0.9,
         gravity: true,
         fps: undefined,
@@ -119,33 +129,32 @@ $(function () { // on dom ready
 
     cy.layout(options);
 
-    cy.bfs = [];
+    cy.outgoers = [];
 
     vGraph.roots.forEach(function (r, index) {
-        cy.bfs.push(
-            {
-                index: index,
-                successors: cy.nodes().successors(),
-                bfs: cy.elements().bfs('#' + vGraph.roots[index], function () {
-                }, true)
-            }
-        );
+        var rootElement = cy.$('#' + vGraph.roots[index]);
+        rootElement.addClass('highlighted');
+        cy.outgoers.push(rootElement.outgoers());
     });
 
     var highlightNextEle = function (b) {
-        b.successors[b.index].addClass('highlighted');
-        //b.bfs.path[b.index].addClass('highlighted');
-        console.log(b.successors);
-        if (b.index < b.successors.length) {
-            b.index++;
-            setTimeout(function () {
-                highlightNextEle(b);
-            }, 200);
+        b.addClass('highlighted');
+        next = b.outgoers();
+        if (next.length > 0) {
+            var delay = 0;
+            next.forEach(function (n) {
+                if (!n.hasClass('highlighted')) {
+                    setTimeout(function () {
+                        highlightNextEle(n);
+                    }, 500 + delay);
+                    delay += 200;
+                }
+            });
         }
     };
 
     // kick off first highlights
-    cy.bfs.forEach(function (b) {
+    cy.outgoers.forEach(function (b) {
         highlightNextEle(b);
     });
 
