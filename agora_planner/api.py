@@ -78,8 +78,17 @@ def __subject_object_join(tp_paths, graph, tp1, tp2):
     pr2 = graph.qname(pr2)
     join_paths = tp_paths[tp1][:]
 
-    if pr1 == RDF.type:
-        return []
+    if pr1 == RDF.type or subject == o2:
+        for path in tp_paths[tp1]:
+            steps = path.get('steps', [])
+            if len(steps):
+                if pr1 == RDF.type:
+                    matching_steps = steps[:]
+                else:
+                    matching_steps = steps[:-1]
+                for o_path in tp_paths[tp2]:
+                    if o_path.get('steps') == matching_steps:
+                        join_paths.remove(path)
     elif pr2 == graph.qname(RDF.type):
         tp1_range = fountain.get_property(graph.qname(pr1)).get('range')
         o2 = graph.qname(o2)
@@ -97,19 +106,6 @@ def __subject_object_join(tp_paths, graph, tp1, tp2):
                     subject_range = fountain.get_property(subject_prop).get('range')
                     for join_subject in subject_range:
                         if pr2 in fountain.get_type(join_subject).get('properties'):
-                            join_paths.remove(path)
-        else:
-            subject_range = fountain.get_property(pr2).get('range')
-            for path in tp_paths[tp1]:
-                steps = path.get('steps', [])
-                if len(steps):
-                    last_type = steps[-1].get('type')
-                    try:
-                        previous_prop = steps[-2].get('property')
-                    except IndexError:
-                        previous_prop = pr2
-                    if previous_prop == pr2:
-                        if last_type in subject_range:
                             join_paths.remove(path)
     return join_paths
 
@@ -130,7 +126,7 @@ def __object_join(tp_paths, graph, tp1, tp2):
 def __graph_plan(g):
     def __add_node(nid, end=False, shape='roundrectangle', label=None, seed=False):
         node_data = {'data': {'id': base64.b16encode(nid), 'label': nid, 'shape': shape,
-                              'width': max(80, len(nid) * 12)}}
+                              'width': max(100, len(nid) * 12)}}
         if label is not None:
             node_data['data']['label'] = str(label)
         if end:
@@ -145,7 +141,7 @@ def __graph_plan(g):
 
     def __add_edge(source, label, target, end=False):
         eid = base64.b64encode(source + label + target)
-        edge_data = {'data': {'id': eid, 'source': nodes[source]['data']['id'], 'label': label,
+        edge_data = {'data': {'id': eid, 'source': nodes[source]['data']['id'], 'label': label + '\n\n',
                      'target': nodes[target]['data']['id']}}
         if end:
             edge_data['classes'] = 'end'
@@ -228,11 +224,13 @@ def get_plan():
     def get_tp_paths(graph):
 
         def __join(f, joins):
+            invalid_paths = []
             for (sj, pj, oj) in joins:
-                invalid_paths = f(tp_paths, c, (s, pr, o), (sj, pj, oj))
-                join_paths.extend(invalid_paths)
+                invalid_paths.extend(f(tp_paths, c, (s, pr, o), (sj, pj, oj)))
+                # join_paths.extend(invalid_paths)
             if len(joins):
-                tp_paths[(s, pr, o)] = filter(lambda z: z not in join_paths, tp_paths[(s, pr, o)])
+                tp_paths[(s, pr, o)] = filter(lambda z: z not in invalid_paths, tp_paths[(s, pr, o)])
+            join_paths.extend(invalid_paths)
 
         tp_paths = {}
         for c in graph.contexts():
@@ -242,33 +240,20 @@ def get_plan():
                 else:
                     tp_paths[(s, pr, o)] = fountain.get_property_paths(graph.qname(pr))
 
-            type_joins = []
+            while True:
+                join_paths = []
 
-            for (s, pr, o) in c.triples((None, None, None)):
-                if len(tp_paths[(s, pr, o)]):
-                    join_paths = []
-                    so_join = [(x, pj, y) for (x, pj, y) in c.triples((None, None, s))]
-                    so_join.extend([(x, pj, y) for (x, pj, y) in c.triples((o, None, None))])
-
-                    if pr == RDF.type:
-                        type_joins.append(((s, pr, o), so_join))
-                        continue
-
-                    __join(__subject_object_join, so_join)
-                    s_join = [(x, pj, y) for (x, pj, y) in c.triples((s, None, None)) if pj != pr]
-                    __join(__subject_join, s_join)
-                    o_join = [(x, pj, y) for (x, pj, y) in c.triples((None, None, o)) if pj != pr]
-                    __join(__object_join, o_join)
-
-            for (s, pr, o), joins in type_joins:
-                if len(joins):
-                    paths_to_remove = []
-                    for path in tp_paths[(s, pr, o)]:
-                        for join in joins:
-                            if path not in tp_paths[join]:
-                                paths_to_remove.append(path)
-                                print 'remove', path
-                    tp_paths[(s, pr, o)] = [p for p in tp_paths[(s, pr, o)] if p not in paths_to_remove]
+                for (s, pr, o) in c.triples((None, None, None)):
+                    if len(tp_paths[(s, pr, o)]):
+                        s_join = [(x, pj, y) for (x, pj, y) in c.triples((s, None, None)) if pj != pr]
+                        __join(__subject_join, s_join)
+                        o_join = [(x, pj, y) for (x, pj, y) in c.triples((None, None, o)) if pj != pr]
+                        __join(__object_join, o_join)
+                        so_join = [(x, pj, y) for (x, pj, y) in c.triples((None, None, s))]
+                        so_join.extend([(x, pj, y) for (x, pj, y) in c.triples((o, None, None))])
+                        __join(__subject_object_join, so_join)
+                if not join_paths:
+                    break
 
         return tp_paths
 

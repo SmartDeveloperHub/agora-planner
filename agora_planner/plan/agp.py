@@ -35,13 +35,6 @@ prefixes_dict = fountain.prefixes
 prefixes = [(uri, p) for (p, uri) in prefixes_dict.items()]
 
 
-def shorten_uri(uri):
-    for (p_uri, prefix) in prefixes:
-        if p_uri in uri:
-            return uri.replace(p_uri, '{}:'.format(prefix))
-    return uri
-
-
 def extend_uri(uri):
     if ':' in uri:
         prefix_parts = uri.split(':')
