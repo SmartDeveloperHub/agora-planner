@@ -24,10 +24,12 @@
 
 __author__ = 'Fernando Serena'
 
+import logging
+
 PORT = 5000
 STORE = '/tmp'
 FOUNTAIN = {
     "url": 'http://localhost:5002'
 }
-
+LOG = logging.DEBUG
 

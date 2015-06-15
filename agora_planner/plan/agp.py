@@ -26,20 +26,16 @@ __author__ = 'Fernando Serena'
 from collections import namedtuple
 from urlparse import urlparse
 from rdflib import ConjunctiveGraph, URIRef, BNode, RDF, Literal
-from agora_planner.plan import fountain
-from uuid import uuid1
-from shortuuid import uuid
+
+# prefixes_dict = fountain.prefixes
+# prefixes = [(uri, p) for (p, uri) in prefixes_dict.items()]
 
 
-prefixes_dict = fountain.prefixes
-prefixes = [(uri, p) for (p, uri) in prefixes_dict.items()]
-
-
-def extend_uri(uri):
+def extend_uri(uri, prefixes):
     if ':' in uri:
         prefix_parts = uri.split(':')
-        if len(prefix_parts) == 2 and prefix_parts[0] in prefixes_dict:
-            return prefixes_dict[prefix_parts[0]] + prefix_parts[1]
+        if len(prefix_parts) == 2 and prefix_parts[0] in prefixes:
+            return prefixes[prefix_parts[0]] + prefix_parts[1]
 
     return uri
 
@@ -48,32 +44,34 @@ def is_variable(arg):
     return arg.startswith('?')
 
 
-def is_uri(uri):
+def is_uri(uri, prefixes):
     if uri.startswith('<') and uri.endswith('>'):
         uri = uri.lstrip('<').rstrip('>')
         parse = urlparse(uri, allow_fragments=True)
         return bool(len(parse.scheme))
     if ':' in uri:
         prefix_parts = uri.split(':')
-        return len(prefix_parts) == 2 and prefix_parts[0] in prefixes_dict
+        return len(prefix_parts) == 2 and prefix_parts[0] in prefixes
 
     return False
 
 
 class TP(namedtuple('TP', "s p o")):
     @classmethod
-    def _make(cls, iterable, new=tuple.__new__, len=len):
+    def _make(cls, iterable, new=tuple.__new__, len=len, prefixes=None):
         def transform_elm(elm):
             if is_variable(elm):
                 return elm
-            elif is_uri(elm):
-                elm = extend_uri(elm)
+            elif is_uri(elm, prefixes):
+                elm = extend_uri(elm, prefixes)
                 return URIRef(elm.lstrip('<').rstrip('>'))
             elif elm == 'a':
                 return RDF.type
             else:
                 return Literal(elm)
 
+        if prefixes is None:
+            prefixes = []
         res = filter(lambda x: x, map(transform_elm, iterable))
         if len(res) == 3:
             return new(cls, res)
@@ -92,25 +90,29 @@ class TP(namedtuple('TP', "s p o")):
         return '{} {} {}'.format(*strings)
 
     @staticmethod
-    def from_string(st):
+    def from_string(st, prefixes):
         parts = st.split(' ')
-        return TP._make(parts)
+        return TP._make(parts, prefixes=prefixes)
 
 
 class AgoraGP(object):
-    def __init__(self):
+    def __init__(self, prefixes):
         self._tps = []
-        pass
+        self.__prefixes = prefixes
 
     @property
     def triple_patterns(self):
         return self._tps
 
     @property
+    def prefixes(self):
+        return self.__prefixes
+
+    @property
     def graph(self):
         g = ConjunctiveGraph()
-        for prefix in prefixes_dict:
-            g.bind(prefix, prefixes_dict[prefix])
+        for prefix in self.__prefixes:
+            g.bind(prefix, self.__prefixes[prefix])
         variables = {}
         contexts = {}
 
@@ -158,15 +160,15 @@ class AgoraGP(object):
         return g
 
     @staticmethod
-    def from_string(st):
+    def from_string(st, prefixes):
         gp = None
         if st.startswith('{') and st.endswith('}'):
             st = st.replace('{', '').replace('}', '').strip()
             tps = st.split('.')
             tps = map(lambda x: x.strip(), filter(lambda y: y != '', tps))
-            gp = AgoraGP()
+            gp = AgoraGP(prefixes)
             for tp in tps:
-                gp.triple_patterns.append(TP.from_string(tp))
+                gp.triple_patterns.append(TP.from_string(tp, gp.prefixes))
         return gp
 
     def __repr__(self):

@@ -31,6 +31,8 @@ import urlparse
 class Fountain(object):
     def __init__(self, host):
         self.__fountain_host = host
+        self.__types = {}
+        self.__properties = {}
 
     def __send_request(self, path):
         response = requests.get(urlparse.urljoin(self.__fountain_host, path))
@@ -51,12 +53,15 @@ class Fountain(object):
         return response.get('seeds')
 
     def get_property(self, prop):
-        response = self.__send_request('properties/{}'.format(prop))
-        return response
+        if prop not in self.__properties:
+            self.__properties[prop] = self.__send_request('properties/{}'.format(prop))
+
+        return self.__properties[prop]
 
     def get_type(self, ty):
-        response = self.__send_request('types/{}'.format(ty))
-        return response
+        if ty not in self.__types:
+            self.__types[ty] = self.__send_request('types/{}'.format(ty))
+        return self.__types[ty]
 
     @property
     def prefixes(self):
