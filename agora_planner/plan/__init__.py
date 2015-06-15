@@ -27,7 +27,7 @@ __author__ = 'Fernando Serena'
 from agora_planner.plan.fountain import Fountain
 from agora_planner.server import app
 from agora_planner.plan.agp import AgoraGP
-from rdflib import RDF
+from rdflib import RDF, BNode, Literal
 from agora_planner.plan.graph import graph_plan
 import logging
 
@@ -38,7 +38,15 @@ def make_fountain():
     return Fountain(app.config['FOUNTAIN'].get('url'))
 
 def _stringify_tp(context, (s, p, o)):
-    return '{} {} {} .'.format(context.qname(s), context.qname(p), context.qname(o))
+    def stringify_elm(elm):
+        if isinstance(elm, BNode):
+            return elm.n3(context.namespace_manager)
+        elif isinstance(elm, Literal):
+            return elm.toPython()
+
+        return context.qname(elm)
+
+    return '{} {} {} .'.format(stringify_elm(s), stringify_elm(p), stringify_elm(o))
 
 class Plan(object):
     def __subject_join(self, tp_paths, context, tp1, tp2):
