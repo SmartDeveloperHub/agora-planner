@@ -25,11 +25,22 @@
 __author__ = 'Fernando Serena'
 
 import logging
+import os
 
-PORT = 5000
-STORE = '/tmp'
-FOUNTAIN = {
-    "url": 'http://localhost:5002'
-}
-LOG = logging.DEBUG
+class Config(object):
+    PORT = 5000
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    LOG = logging.DEBUG
+    FOUNTAIN = 'http://localhost:5002'
+
+class ProductionConfig(Config):
+    DEBUG = False
+    LOG = logging.INFO
+    try:
+        FOUNTAIN = os.environ['FOUNTAIN_PORT'].replace('tcp', 'http')
+    except KeyError:
+        FOUNTAIN = 'http://localhost:5002'
+
 

@@ -35,7 +35,7 @@ import logging
 log = logging.getLogger('agora_planner.plan')
 
 def make_fountain():
-    return Fountain(app.config['FOUNTAIN'].get('url'))
+    return Fountain(app.config['FOUNTAIN'])
 
 def _stringify_tp(context, (s, p, o)):
     def stringify_elm(elm):

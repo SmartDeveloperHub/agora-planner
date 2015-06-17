@@ -24,7 +24,9 @@
 
 __author__ = 'Fernando Serena'
 from flask import Flask
-from agora_planner.server import config
+import os
+
+config = os.environ.get('CONFIG', 'agora_planner.server.config.DevelopmentConfig')
 
 app = Flask(__name__)
 app.config.from_object(config)
