@@ -184,7 +184,7 @@ class Plan(object):
         self.__plan = {"plan": [{"context": self.__get_context(tp), "pattern": tp, "paths": path}
                                 for (tp, path) in paths.items()], "prefixes": gp.prefixes}
 
-        self.__g_plan = graph_plan(self.__plan)
+        self.__g_plan = graph_plan(self.__plan, self.__fountain)
 
     @property
     def json(self):

@@ -38,7 +38,7 @@ def __extend_uri(prefixes, short):
         return short
 
 
-def graph_plan(plan):
+def graph_plan(plan, fountain):
     plan_graph = ConjunctiveGraph()
     plan_graph.bind('agora', AGORA)
     prefixes = plan.get('prefixes')
@@ -118,6 +118,7 @@ def graph_plan(plan):
 
         if isinstance(sub, BNode):
             __add_variable(pattern_node, str(sub))
+
         if isinstance(obj, BNode):
             __add_variable(pattern_node, str(obj), subject=False)
         elif isinstance(obj, Literal):
@@ -129,5 +130,20 @@ def graph_plan(plan):
             plan_graph.add((pattern_node, AGORA.object, obj))
 
         plan_graph.add((pattern_node, AGORA.predicate, pred))
+        if pred == RDF.type:
+            if fountain.get_type(plan_graph.qname(obj)).get('super'):
+                plan_graph.add((pattern_node, AGORA.checkType, Literal(True, datatype=XSD.boolean)))
+
+        sub_expected = plan_graph.subjects(predicate=AGORA.expectedType)
+        for s in sub_expected:
+            expected_types = list(plan_graph.objects(s, AGORA.expectedType))
+            for et in expected_types:
+                plan_graph.remove((s, AGORA.expectedType, et))
+            q_expected_types = [plan_graph.qname(t) for t in expected_types]
+            expected_types = [d for d in expected_types if
+                              not set.intersection(set(fountain.get_type(plan_graph.qname(d)).get('super')),
+                                                   set(q_expected_types))]
+            for et in expected_types:
+                plan_graph.add((s, AGORA.expectedType, et))
 
     return plan_graph
