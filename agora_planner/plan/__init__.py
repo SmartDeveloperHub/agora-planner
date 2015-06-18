@@ -49,7 +49,7 @@ def _stringify_tp(context, (s, p, o)):
     return '{} {} {} .'.format(stringify_elm(s), stringify_elm(p), stringify_elm(o))
 
 class Plan(object):
-    def __subject_join(self, tp_paths, context, tp1, tp2):
+    def __subject_join(self, tp_paths, context, tp1, tp2, **kwargs):
         subject, pr1, o1 = tp1
         _, pr2, o2 = tp2
         log.debug('trying to s-join {} and {}'.format(_stringify_tp(context, tp1), _stringify_tp(context, tp2)))
@@ -126,7 +126,7 @@ class Plan(object):
                                 join_paths.remove(path)
         return join_paths
 
-    def __object_join(self, tp_paths, context, tp1, tp2):
+    def __object_join(self, tp_paths, context, tp1, tp2, **kwargs):
         _, pr1, obj = tp1
         _, pr2, _ = tp2
         log.debug('trying to o-join {} and {}'.format(_stringify_tp(context, tp1), _stringify_tp(context, tp2)))
@@ -175,7 +175,7 @@ class Plan(object):
 
         for (s, pr, o) in tp_hints:
             if pr == RDF.type and 'check' not in tp_hints[(s, pr, o)]:
-                tp_hints[(s, pr, o)]['check'] = len(self.__fountain.get_type(self.__g_plan.qname(o)).get('super')) > 0
+                tp_hints[(s, pr, o)]['check'] = len(self.__fountain.get_type(self.__agp.qname(o)).get('super')) > 0
 
         return tp_paths, tp_hints
 
