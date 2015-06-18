@@ -84,7 +84,7 @@ class Plan(object):
 
         return join_paths
 
-    def __subject_object_join(self, tp_paths, context, tp1, tp2):
+    def __subject_object_join(self, tp_paths, context, tp1, tp2, hints=None):
         subject, pr1, o1 = tp1
         _, pr2, o2 = tp2
         log.debug('trying to so-join {} and {}'.format(_stringify_tp(context, tp1), _stringify_tp(context, tp2)))
@@ -110,7 +110,10 @@ class Plan(object):
                 check_types = self.__fountain.get_type(r_type).get('super')
                 check_types.append(r_type)
                 if o2 in check_types:
-                    return []
+                    join_paths = []
+                    break
+            if not join_paths and hints is not None:
+                hints[tp2]['check'] = hints[tp2].get('check', False) or len(tp1_range) > 1
         else:
             if not subject == o2:
                 for path in tp_paths[tp1]:
@@ -140,14 +143,16 @@ class Plan(object):
         def __join(f, joins):
             invalid_paths = []
             for (sj, pj, oj) in joins:
-                invalid_paths.extend(f(tp_paths, c, (s, pr, o), (sj, pj, oj)))
+                invalid_paths.extend(f(tp_paths, c, (s, pr, o), (sj, pj, oj), hints=tp_hints))
             if len(joins):
                 tp_paths[(s, pr, o)] = filter(lambda z: z not in invalid_paths, tp_paths[(s, pr, o)])
             join_paths.extend(invalid_paths)
 
         tp_paths = {}
+        tp_hints = {}
         for c in self.__agp.contexts():
             for (s, pr, o) in c.triples((None, None, None)):
+                tp_hints[(s, pr, o)] = {}
                 if pr == RDF.type:
                     tp_paths[(s, pr, o)] = self.__fountain.get_property_paths(self.__agp.qname(o))
                 else:
@@ -168,7 +173,11 @@ class Plan(object):
                 if not join_paths:
                     break
 
-        return tp_paths
+        for (s, pr, o) in tp_hints:
+            if pr == RDF.type and 'check' not in tp_hints[(s, pr, o)]:
+                tp_hints[(s, pr, o)]['check'] = len(self.__fountain.get_type(self.__g_plan.qname(o)).get('super')) > 0
+
+        return tp_paths, tp_hints
 
     def __get_context(self, (s, p, o)):
         return str(list(self.__agp.contexts((s, p, o))).pop().identifier)
@@ -179,9 +188,9 @@ class Plan(object):
         self.__agp = gp.graph
         log.debug('Agora Graph Pattern:\n{}'.format(self.__agp.serialize(format='turtle')))
 
-        paths = self.__get_tp_paths()
+        paths, hints = self.__get_tp_paths()
 
-        self.__plan = {"plan": [{"context": self.__get_context(tp), "pattern": tp, "paths": path}
+        self.__plan = {"plan": [{"context": self.__get_context(tp), "pattern": tp, "paths": path, "hints": hints[tp]}
                                 for (tp, path) in paths.items()], "prefixes": gp.prefixes}
 
         self.__g_plan = graph_plan(self.__plan, self.__fountain)

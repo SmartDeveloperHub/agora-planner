@@ -97,6 +97,7 @@ def graph_plan(plan, fountain):
     for i, tp_plan in enumerate(ef_plan):
         paths = tp_plan.get('paths')
         pattern = tp_plan.get('pattern')
+        hints = tp_plan.get('hints')
         context = BNode('space_{}'.format(tp_plan.get('context')))
         for path in paths:
             steps = path.get('steps')
@@ -131,8 +132,8 @@ def graph_plan(plan, fountain):
 
         plan_graph.add((pattern_node, AGORA.predicate, pred))
         if pred == RDF.type:
-            if fountain.get_type(plan_graph.qname(obj)).get('super'):
-                plan_graph.add((pattern_node, AGORA.checkType, Literal(True, datatype=XSD.boolean)))
+            if 'check' in hints:
+                plan_graph.add((pattern_node, AGORA.checkType, Literal(hints['check'], datatype=XSD.boolean)))
 
         sub_expected = plan_graph.subjects(predicate=AGORA.expectedType)
         for s in sub_expected:
