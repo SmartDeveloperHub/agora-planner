@@ -139,7 +139,7 @@ class AgoraGP(object):
                 if s in ctx:
                     ctx.add(o)
                     included = True
-                elif o in ctx:
+                elif o in ctx and not isinstance(o, URIRef):
                     ctx.add(s)
                     included = True
             if not included:
