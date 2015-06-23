@@ -24,11 +24,11 @@
 
 __author__ = 'Fernando Serena'
 
-from agora_planner.plan.fountain import Fountain
-from agora_planner.server import app
-from agora_planner.plan.agp import AgoraGP
+from agora.planner.plan.fountain import Fountain
+from agora.planner.server import app
+from agora.planner.plan.agp import AgoraGP
 from rdflib import RDF, BNode, Literal
-from agora_planner.plan.graph import graph_plan
+from agora.planner.plan.graph import graph_plan
 import logging
 
 

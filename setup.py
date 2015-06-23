@@ -28,7 +28,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="Agora-Planner",
-    version="0.2.8",
+    version="0.2.9",
     author="Fernando Serena",
     author_email="fernando.serena@centeropenmiddleware.com",
     description="The Agora core service that provides search plans for graph patterns.",
@@ -37,6 +37,7 @@ setup(
     url="https://github.com/smartdeveloperhub/agora-planner",
     download_url="https://github.com/smartdeveloperhub/agora-planner/tarball/0.2.1",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+    namespace_packages=['agora'],
     install_requires=['flask', 'Flask-Negotiate', 'requests', 'rdflib', 'networkx'],
     classifiers=[],
     scripts=['planner'],

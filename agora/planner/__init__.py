@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
   This file is part of the Smart Developer Hub Project:
@@ -11,7 +10,7 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+  You may obtain a copy of the License at 
 
             http://www.apache.org/licenses/LICENSE-2.0
 
@@ -24,23 +23,3 @@
 """
 
 __author__ = 'Fernando Serena'
-
-from agora.planner.server import app
-import logging
-
-from agora.planner import api
-
-log_level = app.config['LOG']
-
-ch = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-ch.setLevel(log_level)
-ch.setFormatter(formatter)
-logger = logging.getLogger('agora_planner')
-logger.addHandler(ch)
-logger.setLevel(log_level)
-
-logger.info('Ready')
-
-
-app.run(host='0.0.0.0', debug=True, port=app.config['PORT'])

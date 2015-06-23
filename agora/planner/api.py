@@ -25,11 +25,11 @@
 __author__ = 'Fernando Serena'
 
 from rdflib import RDF
-from agora_planner.plan import Plan
+from agora.planner.plan import Plan
 from flask import request, make_response, jsonify, render_template
 from flask_negotiate import produces
-from agora_planner.server import app
-from agora_planner.plan.graph import AGORA
+from agora.planner.server import app
+from agora.planner.plan.graph import AGORA
 import json
 import base64
 
