@@ -3,3 +3,4 @@ Flask-Negotiate==0.1.0
 rdflib==4.2.0
 rdflib-jsonld==0.2
 requests
+networkx
