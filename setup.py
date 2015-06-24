@@ -28,7 +28,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="Agora-Planner",
-    version="0.2.10",
+    version="0.2.11",
     author="Fernando Serena",
     author_email="fernando.serena@centeropenmiddleware.com",
     description="The Agora core service that provides search plans for graph patterns.",
@@ -41,6 +41,6 @@ setup(
     install_requires=['flask', 'Flask-Negotiate', 'requests', 'rdflib', 'networkx'],
     classifiers=[],
     scripts=['planner'],
-    package_dir={'agora_planner': 'agora_planner', 'agora_planner.server': 'agora_planner/server'},
-    package_data={'agora_planner.server': ['templates/*.*', 'static/*.*']},
+    package_dir={'agora.planner': 'agora/planner', 'agora.planner.server': 'agora/planner/server'},
+    package_data={'agora.planner.server': ['templates/*.*', 'static/*.*']},
 )
