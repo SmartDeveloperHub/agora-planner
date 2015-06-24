@@ -30,7 +30,7 @@ from agora.planner.plan.agp import AgoraGP
 from rdflib import RDF, BNode, Literal
 from agora.planner.plan.graph import graph_plan
 import logging
-
+from rdflib.namespace import FOAF
 
 log = logging.getLogger('agora_planner.plan')
 
@@ -52,6 +52,7 @@ class Plan(object):
     def __subject_join(self, tp_paths, context, tp1, tp2, **kwargs):
         subject, pr1, o1 = tp1
         _, pr2, o2 = tp2
+
         log.debug('trying to s-join {} and {}'.format(_stringify_tp(context, tp1), _stringify_tp(context, tp2)))
         if pr2 == RDF.type:
             o2 = context.qname(o2)
@@ -162,6 +163,8 @@ class Plan(object):
                 join_paths = []
 
                 for (s, pr, o) in c.triples((None, None, None)):
+                    if pr == FOAF.name:
+                        print 'on name'
                     if len(tp_paths[(s, pr, o)]):
                         s_join = [(x, pj, y) for (x, pj, y) in c.triples((s, None, None)) if pj != pr]
                         __join(self.__subject_join, s_join)

@@ -26,6 +26,7 @@ __author__ = 'Fernando Serena'
 from collections import namedtuple
 from urlparse import urlparse
 from rdflib import ConjunctiveGraph, URIRef, BNode, RDF, Literal
+import networkx as nx
 
 # prefixes_dict = fountain.prefixes
 # prefixes = [(uri, p) for (p, uri) in prefixes_dict.items()]
@@ -133,17 +134,12 @@ class AgoraGP(object):
                     except ValueError:
                         return URIRef(elm)
 
+        nxg = nx.Graph()
         for (s, p, o) in self._tps:
-            included = False
-            for ctx in contexts.values():
-                if s in ctx:
-                    ctx.add(o)
-                    included = True
-                elif o in ctx and not isinstance(o, URIRef):
-                    ctx.add(s)
-                    included = True
-            if not included:
-                contexts[str(len(contexts))] = {s, o}
+            nxg.add_nodes_from([s, o])
+            nxg.add_edge(s, o)
+
+        contexts = dict([(str(index), c) for (index, c) in enumerate(nx.connected_components(nxg))])
 
         for (s, p, o) in self._tps:
             s_node = nodify(s)
