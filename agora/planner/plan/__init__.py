@@ -163,8 +163,6 @@ class Plan(object):
                 join_paths = []
 
                 for (s, pr, o) in c.triples((None, None, None)):
-                    if pr == FOAF.name:
-                        print 'on name'
                     if len(tp_paths[(s, pr, o)]):
                         s_join = [(x, pj, y) for (x, pj, y) in c.triples((s, None, None)) if pj != pr]
                         __join(self.__subject_join, s_join)
