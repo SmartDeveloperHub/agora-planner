@@ -32,7 +32,7 @@ from agora.planner.server import app
 from agora.planner.plan.graph import AGORA
 import json
 import base64
-
+from agora.client.agora import PlanExecutor
 
 @app.route('/plan')
 @app.route('/plan/view')
@@ -146,5 +146,16 @@ def get_plan():
                                edges=json.dumps(edges), roots=json.dumps(roots), tps=json.dumps(tps))
 
     response = make_response(plan.graph.serialize(format='turtle'))
+    response.headers['Content-Type'] = 'text/turtle'
+    return response
+
+
+@app.route('/fragment')
+def get_fragment():
+    gp_str = request.args.get('gp', '{}')
+    plan = Plan(gp_str)
+    executor = PlanExecutor(plan.graph)
+    fragment = executor.get_fragment()
+    response = make_response(fragment.serialize(format='turtle'))
     response.headers['Content-Type'] = 'text/turtle'
     return response
