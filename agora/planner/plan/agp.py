@@ -92,7 +92,12 @@ class TP(namedtuple('TP', "s p o")):
 
     @staticmethod
     def from_string(st, prefixes):
-        parts = st.split(' ')
+        if st.endswith('"'):
+            parts = [st[st.find('"'):]]
+            st = st.replace(parts[0], '').rstrip()
+            parts = st.split(" ") + parts
+        else:
+            parts = st.split(' ')
         return TP._make(parts, prefixes=prefixes)
 
 
