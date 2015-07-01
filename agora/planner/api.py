@@ -159,3 +159,13 @@ def get_fragment():
     response = make_response(fragment.serialize(format='turtle'))
     response.headers['Content-Type'] = 'text/turtle'
     return response
+
+@app.route('/sparql')
+def query_fragment():
+    q_str = request.args.get('q', None)
+    pattern = q_str[q_str.find('{'):]
+    plan = Plan(pattern.lstrip().rstrip())
+    executor = PlanExecutor(plan.graph)
+    fragment = executor.get_fragment()
+    result = fragment.query(q_str)
+    return jsonify({"result": list(result)})
