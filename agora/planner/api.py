@@ -26,13 +26,14 @@ __author__ = 'Fernando Serena'
 
 from rdflib import RDF
 from agora.planner.plan import Plan
-from flask import request, make_response, jsonify, render_template
+from flask import request, make_response, jsonify, render_template, Response
 from flask_negotiate import produces
 from agora.planner.server import app
 from agora.planner.plan.graph import AGORA
 import json
 import base64
 from agora.client.agora import PlanExecutor
+
 
 @app.route('/plan')
 @app.route('/plan/view')
@@ -152,13 +153,19 @@ def get_plan():
 
 @app.route('/fragment')
 def get_fragment():
+    def get_triples():
+        for prefix, uri in ns:
+            yield '@prefix {} : <{}>.\n'.format(prefix, uri)
+        for (_, s, p, o) in gen:
+            yield '{} {} {} .\n'.format(s.n3(graph.namespace_manager), p.n3(graph.namespace_manager),
+                                        o.n3(graph.namespace_manager))
+
     gp_str = request.args.get('gp', '{}')
     plan = Plan(gp_str)
     executor = PlanExecutor(plan.graph)
-    fragment = executor.get_fragment()
-    response = make_response(fragment.serialize(format='turtle'))
-    response.headers['Content-Type'] = 'text/turtle'
-    return response
+    gen, ns, graph = executor.get_fragment_generator()
+    return Response(get_triples(), mimetype='text/rdf+n3')
+
 
 @app.route('/sparql')
 def query_fragment():
