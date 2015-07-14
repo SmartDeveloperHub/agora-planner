@@ -123,7 +123,7 @@ class Plan(object):
                         subject_prop = steps[-1].get('property')
                         subject_range = self.__fountain.get_property(subject_prop).get('range')
                         for join_subject in subject_range:
-                            if pr2 in self.__fountain.get_type(join_subject).get('properties'):
+                            if pr2 in self.__fountain.get_type(join_subject).get('properties') and path in join_paths:
                                 join_paths.remove(path)
         return join_paths
 
