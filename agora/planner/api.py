@@ -155,7 +155,8 @@ def get_plan():
 def get_fragment():
     def get_triples():
         for prefix, uri in ns:
-            yield '@prefix {} : <{}>.\n'.format(prefix, uri)
+            yield '@prefix {}: <{}> .\n'.format(prefix, uri)
+        yield '\n'
         for (_, s, p, o) in gen:
             yield '{} {} {} .\n'.format(s.n3(graph.namespace_manager), p.n3(graph.namespace_manager),
                                         o.n3(graph.namespace_manager))
@@ -163,8 +164,11 @@ def get_fragment():
     gp_str = request.args.get('gp', '{}')
     plan = Plan(gp_str)
     executor = PlanExecutor(plan.graph)
-    gen, ns, graph = executor.get_fragment_generator()
-    return Response(get_triples(), mimetype='text/rdf+n3')
+    gen, ns, graph = executor.get_fragment_generator(queue_wait=1)
+    try:
+        return Response(get_triples(), mimetype='text/n3')
+    except Exception, e:
+        print e.message
 
 
 @app.route('/sparql')
