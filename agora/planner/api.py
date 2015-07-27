@@ -21,6 +21,7 @@
   limitations under the License.
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
+import socket
 
 __author__ = 'Fernando Serena'
 
@@ -165,10 +166,7 @@ def get_fragment():
     plan = Plan(gp_str)
     executor = PlanExecutor(plan.graph)
     gen, ns, graph = executor.get_fragment_generator(queue_wait=1)
-    try:
-        return Response(get_triples(), mimetype='text/n3')
-    except Exception, e:
-        print e.message
+    return Response(get_triples(), mimetype='text/n3')
 
 
 @app.route('/sparql')

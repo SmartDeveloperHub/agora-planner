@@ -28,7 +28,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="Agora-Planner",
-    version="0.2.20",
+    version="0.2.21",
     author="Fernando Serena",
     author_email="fernando.serena@centeropenmiddleware.com",
     description="The Agora core service that provides search plans for graph patterns.",

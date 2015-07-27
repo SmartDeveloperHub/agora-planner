@@ -34,8 +34,10 @@ from rdflib.namespace import FOAF
 
 log = logging.getLogger('agora_planner.plan')
 
+
 def make_fountain():
     return Fountain(app.config['FOUNTAIN'])
+
 
 def _stringify_tp(context, (s, p, o)):
     def stringify_elm(elm):
@@ -47,6 +49,7 @@ def _stringify_tp(context, (s, p, o)):
         return context.qname(elm)
 
     return '{} {} {} .'.format(stringify_elm(s), stringify_elm(p), stringify_elm(o))
+
 
 class Plan(object):
     def __subject_join(self, tp_paths, context, tp1, tp2, **kwargs):
