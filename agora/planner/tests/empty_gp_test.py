@@ -29,7 +29,7 @@ from nose.tools import *
 from agora.planner.tests import PlannerTest
 
 
-class ConnectionTest(PlannerTest):
-    def test_fountain_connection(self):
+class EmptyGraphPatternTest(PlannerTest):
+    def test(self):
         r = self.app.get('/plan?gp={}', headers={'accept': 'text/turtle'})
         eq_(r.status_code, 200, r.data)
