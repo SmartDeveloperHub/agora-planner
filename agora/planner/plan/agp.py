@@ -28,6 +28,7 @@ from urlparse import urlparse
 from rdflib import ConjunctiveGraph, URIRef, BNode, RDF, Literal
 import networkx as nx
 
+
 # prefixes_dict = fountain.prefixes
 # prefixes = [(uri, p) for (p, uri) in prefixes_dict.items()]
 
@@ -87,6 +88,7 @@ class TP(namedtuple('TP', "s p o")):
                 return '<%s>' % elm
 
             return str(elm)
+
         strings = map(elm_to_string, [self.s, self.p, self.o])
         return '{} {} {}'.format(*strings)
 
@@ -175,6 +177,3 @@ class AgoraGP(object):
     def __repr__(self):
         tp_strings = map(lambda x: str(x), self._tps)
         return '{ %s}' % reduce(lambda x, y: (x + '%s . ' % str(y)), tp_strings, '')
-
-
-

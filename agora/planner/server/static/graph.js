@@ -161,7 +161,7 @@ $(function () { // on dom ready
 
 }); // on dom ready
 
-$(document).ready(function() {
+$(document).ready(function () {
     tps.forEach(function (tp) {
         $("#tps").append('<p>' + tp + ' .</p>')
     });

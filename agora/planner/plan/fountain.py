@@ -71,5 +71,3 @@ class Fountain(object):
     def get_property_paths(self, prop):
         response = self.__send_request('paths/{}'.format(prop))
         return response.get("paths")
-
-

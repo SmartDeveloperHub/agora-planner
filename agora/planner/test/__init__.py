@@ -10,7 +10,7 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+  You may obtain a copy of the License at 
 
             http://www.apache.org/licenses/LICENSE-2.0
 
@@ -24,20 +24,4 @@
 
 __author__ = 'Fernando Serena'
 
-import logging
-
-
-class Config(object):
-    PORT = 5000
-
-
-class DevelopmentConfig(Config):
-    DEBUG = True
-    LOG = logging.DEBUG
-    FOUNTAIN = 'http://localhost:5002'
-
-
-class ProductionConfig(Config):
-    DEBUG = False
-    LOG = logging.INFO
-    FOUNTAIN = 'http://fountain:5002'
+import unittest
