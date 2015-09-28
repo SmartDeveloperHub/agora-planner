@@ -37,7 +37,7 @@ setup(
     url="https://github.com/smartdeveloperhub/agora-planner",
     download_url="https://github.com/smartdeveloperhub/agora-planner/tarball/0.2.1",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-    namespace_packages=['agora'],
+    namespace_packages=['agora.planner'],
     install_requires=['flask', 'Flask-Negotiate', 'requests', 'rdflib', 'networkx', 'Agora-Client'],
     classifiers=[],
     scripts=['planner'],

@@ -26,7 +26,7 @@ __author__ = 'Fernando Serena'
 
 from nose.tools import *
 
-from agora.planner.test import PlannerTest
+from agora.planner.tests import PlannerTest
 
 
 class ConnectionTest(PlannerTest):

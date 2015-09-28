@@ -8,8 +8,7 @@ install:
   - pip install -r requirements.txt
   - pip install coverage
   - pip install coveralls
-  - pip install Agora-Fountain==0.4.0.dev0
-  - pip install Agora-Client
+  - pip install Agora-Fountain==0.4.0.dev1
 # command to run tests
 script:
   - fountain &
