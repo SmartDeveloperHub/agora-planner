@@ -36,6 +36,39 @@ import base64
 from agora.client.agora import PlanExecutor
 
 
+class APIError(Exception):
+    status_code = 400
+
+    def __init__(self, message, status_code=None, payload=None):
+        Exception.__init__(self)
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        rv = dict(self.payload or ())
+        rv['message'] = self.message
+        return rv
+
+
+class NotFound(APIError):
+    def __init__(self, message, payload=None):
+        super(NotFound, self).__init__(message, 404, payload)
+
+
+class Conflict(APIError):
+    def __init__(self, message, payload=None):
+        super(Conflict, self).__init__(message, 409, payload)
+
+
+@app.errorhandler(APIError)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
+
+
 @app.route('/plan')
 @app.route('/plan/view')
 @produces('application/json', 'text/turtle', 'text/html')
@@ -133,7 +166,10 @@ def get_plan():
         return nodes.values(), edges.values(), list(roots)
 
     gp_str = request.args.get('gp', '{}')
-    plan = Plan(gp_str)
+    try:
+        plan = Plan(gp_str)
+    except EnvironmentError as e:
+        raise NotFound(e.message)
 
     mimetypes = str(request.accept_mimetypes).split(',')
     if 'application/json' in mimetypes:

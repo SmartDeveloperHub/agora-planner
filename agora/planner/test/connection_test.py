@@ -24,34 +24,12 @@
 
 __author__ = 'Fernando Serena'
 
-import unittest
+from nose.tools import *
 
-import logging
-
-from agora.planner.server import app
+from agora.planner.test import PlannerTest
 
 
-def setup():
-    from agora.planner.server.config import TestingConfig
-
-    app.config['TESTING'] = True
-    app.config.from_object(TestingConfig)
-
-    from agora.planner import api
-
-
-class PlannerTest(unittest.TestCase):
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
-    @classmethod
-    def setUpClass(cls):
-        pass
-
-    def setUp(self):
-        self.app = app.test_client()
-        self.log = logging.getLogger('agora.planner.test')
-
-    def tearDown(self):
-        pass
+class ConnectionTest(PlannerTest):
+    def test_fountain_connection(self):
+        r = self.app.get('/plan?gp={}', headers={'accept': 'text/turtle'})
+        eq_(r.status_code, 200, r.data)

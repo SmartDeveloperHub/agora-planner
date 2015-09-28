@@ -35,8 +35,12 @@ class Fountain(object):
         self.__properties = {}
 
     def __send_request(self, path):
-        response = requests.get(urlparse.urljoin(self.__fountain_host, path))
-        return response.json()
+        try:
+            response = requests.get(urlparse.urljoin(self.__fountain_host, path))
+            return response.json()
+        except requests.ConnectionError:
+            raise EnvironmentError('A fountain is not available')
+
 
     @property
     def types(self):

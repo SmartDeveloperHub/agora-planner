@@ -41,3 +41,9 @@ class ProductionConfig(Config):
     DEBUG = False
     LOG = logging.INFO
     FOUNTAIN = 'http://fountain:5002'
+
+
+class TestingConfig(Config):
+    DEBUG = True
+    LOG = logging.DEBUG
+    FOUNTAIN = 'http://localhost:5002'

@@ -1,0 +1,22 @@
+language: python
+python:
+  - "2.7"
+before_script:
+  - sudo redis-server /etc/redis/redis.conf --port 6379
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+  - pip install coverage
+  - pip install coveralls
+  - pip install Agora-Fountain==0.4.0.dev0
+  - pip install Agora-Client
+# command to run tests
+script:
+  - fountain &
+  - nosetests -v --with-coverage --cover-package=agora.planner
+branches:
+  only:
+    - master
+    - develop
+after_success:
+  coveralls

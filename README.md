@@ -3,4 +3,9 @@ Agora-Planner
 
 The Agora core service that provides search plans for graph patterns.
 
-Agora-Fountain is distributed under the Apache License, version 2.0.
+Agora-Planner is distributed under the Apache License, version 2.0.
+
+## Build Status
+
+[![Build Status](https://travis-ci.org/SmartDeveloperHub/agora-planner.svg?branch=develop)](https://travis-ci.org/SmartDeveloperHub/agora-planner)
+[![Coverage Status](https://coveralls.io/repos/SmartDeveloperHub/agora-planner/badge.svg?branch=develop&service=github)](https://coveralls.io/github/SmartDeveloperHub/agora-planner?branch=develop)
