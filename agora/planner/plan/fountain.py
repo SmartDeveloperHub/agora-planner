@@ -37,10 +37,11 @@ class Fountain(object):
     def __send_request(self, path):
         try:
             response = requests.get(urlparse.urljoin(self.__fountain_host, path))
+            if response.status_code != 200:
+                raise IOError(response.json())
             return response.json()
         except requests.ConnectionError:
             raise EnvironmentError('A fountain is not available')
-
 
     @property
     def types(self):
