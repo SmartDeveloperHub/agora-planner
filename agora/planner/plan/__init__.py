@@ -157,10 +157,13 @@ class Plan(object):
         for c in self.__agp.contexts():
             for (s, pr, o) in c.triples((None, None, None)):
                 tp_hints[(s, pr, o)] = {}
-                if pr == RDF.type:
-                    tp_paths[(s, pr, o)] = self.__fountain.get_property_paths(self.__agp.qname(o))
-                else:
-                    tp_paths[(s, pr, o)] = self.__fountain.get_property_paths(self.__agp.qname(pr))
+                try:
+                    if pr == RDF.type:
+                        tp_paths[(s, pr, o)] = self.__fountain.get_property_paths(self.__agp.qname(o))
+                    else:
+                        tp_paths[(s, pr, o)] = self.__fountain.get_property_paths(self.__agp.qname(pr))
+                except IOError as e:
+                    raise NameError('Cannot get a path to an unknown subject: {}'.format(e.message))
 
             while True:
                 join_paths = []
@@ -188,16 +191,22 @@ class Plan(object):
 
     def __init__(self, gp):
         self.__fountain = make_fountain()
-        gp = AgoraGP.from_string(gp, self.fountain.prefixes)
-        self.__agp = gp.graph
+        agora_gp = AgoraGP.from_string(gp, self.fountain.prefixes)
+        if agora_gp is None:
+            raise AttributeError('{} is not a valid graph pattern'.format(gp))
+
+        self.__agp = agora_gp.graph
         log.debug('Agora Graph Pattern:\n{}'.format(self.__agp.serialize(format='turtle')))
 
-        paths, hints = self.__get_tp_paths()
+        try:
+            paths, hints = self.__get_tp_paths()
+            self.__plan = {
+                "plan": [{"context": self.__get_context(tp), "pattern": tp, "paths": path, "hints": hints[tp]}
+                         for (tp, path) in paths.items()], "prefixes": agora_gp.prefixes}
 
-        self.__plan = {"plan": [{"context": self.__get_context(tp), "pattern": tp, "paths": path, "hints": hints[tp]}
-                                for (tp, path) in paths.items()], "prefixes": gp.prefixes}
-
-        self.__g_plan = graph_plan(self.__plan, self.__fountain)
+            self.__g_plan = graph_plan(self.__plan, self.__fountain)
+        except TypeError:
+            raise NameError
 
     @property
     def json(self):
