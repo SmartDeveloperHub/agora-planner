@@ -76,7 +76,8 @@ class TP(namedtuple('TP', "s p o")):
             prefixes = []
         res = filter(lambda x: x, map(transform_elm, iterable))
         if len(res) == 3:
-            return new(cls, res)
+            if not (isinstance(res[0], Literal) or isinstance(res[1], Literal)):
+                return new(cls, res)
 
         raise TypeError('Bad TP arguments: {}'.format(iterable))
 
@@ -167,7 +168,7 @@ class AgoraGP(object):
         gp = None
         if st.startswith('{') and st.endswith('}'):
             st = st.replace('{', '').replace('}', '').strip()
-            tps = st.split('.')
+            tps = st.split('. ')
             tps = map(lambda x: x.strip(), filter(lambda y: y != '', tps))
             gp = AgoraGP(prefixes)
             for tp in tps:
