@@ -10,7 +10,7 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+  You may obtain a copy of the License at 
 
             http://www.apache.org/licenses/LICENSE-2.0
 
@@ -24,23 +24,12 @@
 
 __author__ = 'Fernando Serena'
 
-from setuptools import setup, find_packages
+from nose.tools import *
 
-setup(
-    name="Agora-Planner",
-    version="0.3.0.dev0",
-    author="Fernando Serena",
-    author_email="fernando.serena@centeropenmiddleware.com",
-    description="The Agora core service that provides search plans for graph patterns.",
-    license="Apache 2",
-    keywords=["linked-data", "path", "ontology", "plan"],
-    url="https://github.com/smartdeveloperhub/agora-planner",
-    download_url="https://github.com/smartdeveloperhub/agora-planner/tarball/0.2.1",
-    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-    namespace_packages=['agora.planner'],
-    install_requires=['flask', 'Flask-Negotiate', 'requests', 'rdflib', 'networkx', 'Agora-Client'],
-    classifiers=[],
-    scripts=['planner'],
-    package_dir={'agora.planner': 'agora/planner', 'agora.planner.server': 'agora/planner/server'},
-    package_data={'agora.planner.server': ['templates/*.*', 'static/*.*']},
-)
+from agora.planner.tests import PlannerTest
+
+
+class NoGraphPatternTest(PlannerTest):
+    def test(self):
+        r = self.app.get('/plan', headers={'accept': 'text/turtle'})
+        eq_(r.status_code, 200, r.data)
