@@ -27,10 +27,7 @@ from collections import namedtuple
 from urlparse import urlparse
 from rdflib import ConjunctiveGraph, URIRef, BNode, RDF, Literal
 import networkx as nx
-
-
-# prefixes_dict = fountain.prefixes
-# prefixes = [(uri, p) for (p, uri) in prefixes_dict.items()]
+import re
 
 
 def extend_uri(uri, prefixes):
@@ -168,8 +165,8 @@ class AgoraGP(object):
         gp = None
         if st.startswith('{') and st.endswith('}'):
             st = st.replace('{', '').replace('}', '').strip()
-            tps = st.split('. ')
-            tps = map(lambda x: x.strip(), filter(lambda y: y != '', tps))
+            tps = re.split('\. ', st)
+            tps = map(lambda x: x.strip().strip('.'), filter(lambda y: y != '', tps))
             gp = AgoraGP(prefixes)
             for tp in tps:
                 gp.triple_patterns.append(TP.from_string(tp, gp.prefixes))
