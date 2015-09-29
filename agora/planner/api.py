@@ -170,6 +170,8 @@ def get_plan():
         plan = Plan(gp_str)
     except EnvironmentError as e:
         raise NotFound(e.message)
+    except (AttributeError, NameError, TypeError) as e:
+        raise APIError(e.message)
 
     mimetypes = str(request.accept_mimetypes).split(',')
     if 'application/json' in mimetypes:
