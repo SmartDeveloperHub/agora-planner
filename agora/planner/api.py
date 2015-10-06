@@ -197,7 +197,7 @@ def get_fragment():
             yield '@prefix {}: <{}> .\n'.format(prefix, uri)
         yield '\n'
         for (_, s, p, o) in gen:
-            yield '{} {} {} .\n'.format(s.n3(graph.namespace_manager), p.n3(graph.namespace_manager),
+            yield u'{} {} {} .\n'.format(s.n3(graph.namespace_manager), p.n3(graph.namespace_manager),
                                         o.n3(graph.namespace_manager))
 
     gp_str = request.args.get('gp', '{}')
