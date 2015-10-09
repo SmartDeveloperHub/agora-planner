@@ -26,6 +26,9 @@ __author__ = 'Fernando Serena'
 
 import requests
 import urlparse
+import logging
+
+log = logging.getLogger('agora.planner.plan')
 
 
 class Fountain(object):
@@ -41,7 +44,9 @@ class Fountain(object):
                 raise IOError(response.json())
             return response.json()
         except requests.ConnectionError:
-            raise EnvironmentError('A fountain is not available')
+            message = 'A fountain is not available'
+            log.error(message)
+            raise EnvironmentError(message)
 
     @property
     def types(self):

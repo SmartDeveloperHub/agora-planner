@@ -1,7 +1,7 @@
-Flask==0.10.1
-Flask-Negotiate==0.1.0
-rdflib==4.2.0
-rdflib-jsonld==0.2
+Flask
+Flask-Negotiate
+rdflib
+rdflib-jsonld
 requests
 networkx
 Agora-Client

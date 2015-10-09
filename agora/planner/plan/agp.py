@@ -28,6 +28,9 @@ from urlparse import urlparse
 from rdflib import ConjunctiveGraph, URIRef, BNode, RDF, Literal
 import networkx as nx
 import re
+import logging
+
+log = logging.getLogger('agora.planner.plan')
 
 
 def extend_uri(uri, prefixes):
@@ -120,7 +123,6 @@ class AgoraGP(object):
         for prefix in self.__prefixes:
             g.bind(prefix, self.__prefixes[prefix])
         variables = {}
-        contexts = {}
 
         def nodify(elm):
             if is_variable(elm):

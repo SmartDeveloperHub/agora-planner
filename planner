@@ -27,20 +27,23 @@ __author__ = 'Fernando Serena'
 
 from agora.planner.server import app
 import logging
+import os
 
 from agora.planner import api
 
-log_level = app.config['LOG']
+log_level = os.environ.get('LOG_LEVEL')
+if log_level is None:
+    log_level = app.config['LOG']
 
 ch = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 ch.setLevel(log_level)
 ch.setFormatter(formatter)
-logger = logging.getLogger('agora_planner')
+logger = logging.getLogger('agora')
 logger.addHandler(ch)
 logger.setLevel(log_level)
+logger = logging.getLogger('agora.planner')
 
 logger.info('Ready')
 
-
-app.run(host='0.0.0.0', debug=app.config['DEBUG'], port=app.config['PORT'], use_reloader=False)
+app.run(host='0.0.0.0', debug=app.config['DEBUG'], port=app.config['PORT'], use_reloader=False, threaded=True)

@@ -30,9 +30,8 @@ from agora.planner.plan.agp import AgoraGP
 from rdflib import RDF, BNode, Literal
 from agora.planner.plan.graph import graph_plan
 import logging
-from rdflib.namespace import FOAF
 
-log = logging.getLogger('agora_planner.plan')
+log = logging.getLogger('agora.planner.plan')
 
 
 def make_fountain():

@@ -198,7 +198,7 @@ def get_fragment():
         yield '\n'
         for (_, s, p, o) in gen:
             yield u'{} {} {} .\n'.format(s.n3(graph.namespace_manager), p.n3(graph.namespace_manager),
-                                        o.n3(graph.namespace_manager))
+                                         o.n3(graph.namespace_manager))
 
     gp_str = request.args.get('gp', '{}')
     plan = Plan(gp_str)
