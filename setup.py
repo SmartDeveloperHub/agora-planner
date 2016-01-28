@@ -22,19 +22,23 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
+from setuptools import setup, find_packages
+import re
+
 __author__ = 'Fernando Serena'
 
-from setuptools import setup, find_packages
+module_file = open("agora/planner/__init__.py").read()
+metadata = dict(re.findall("__([a-z]+)__\s*=\s*'([^']+)'", module_file))
 
 setup(
     name="Agora-Planner",
-    version="0.3.5-alpha1",
-    author="Fernando Serena",
-    author_email="fernando.serena@centeropenmiddleware.com",
-    description="The Agora core service that provides search plans for graph patterns.",
+    version=metadata['version'],
+    author=metadata['author'],
+    author_email=metadata['email'],
+    description=metadata['description'],
     license="Apache 2",
     keywords=["linked-data", "path", "ontology", "plan"],
-    url="https://github.com/smartdeveloperhub/agora-planner",
+    url=metadata['github'],
     download_url="https://github.com/smartdeveloperhub/agora-planner/tarball/0.3.5-alpha1",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     namespace_packages=['agora.planner'],
