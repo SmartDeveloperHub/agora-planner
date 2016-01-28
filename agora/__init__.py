@@ -22,12 +22,12 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
+import pkg_resources
+
 __author__ = 'Fernando Serena'
 
 # this is a namespace package
 try:
-    import pkg_resources
-
     pkg_resources.declare_namespace(__name__)
 except ImportError:
     import pkgutil

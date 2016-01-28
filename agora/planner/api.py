@@ -21,19 +21,20 @@
   limitations under the License.
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
-import socket
 
-__author__ = 'Fernando Serena'
+import base64
+import json
 
-from rdflib import RDF
-from agora.planner.plan import Plan
 from flask import request, make_response, jsonify, render_template, Response
 from flask_negotiate import produces
-from agora.planner.server import app
+from rdflib import RDF
+
+from agora.client.execution import PlanExecutor
+from agora.planner.plan import Plan
 from agora.planner.plan.graph import AGORA
-import json
-import base64
-from agora.client.agora import PlanExecutor
+from agora.planner.server import app
+
+__author__ = 'Fernando Serena'
 
 
 class APIError(Exception):

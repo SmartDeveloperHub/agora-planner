@@ -22,10 +22,11 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
-__author__ = 'Fernando Serena'
 
 from rdflib import ConjunctiveGraph, URIRef, BNode, RDF, Literal
 from rdflib.namespace import Namespace, XSD, RDFS
+
+__author__ = 'Fernando Serena'
 
 AGORA = Namespace('http://agora.org#')
 

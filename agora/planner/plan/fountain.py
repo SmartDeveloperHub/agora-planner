@@ -22,11 +22,12 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
-__author__ = 'Fernando Serena'
+import logging
+import urlparse
 
 import requests
-import urlparse
-import logging
+
+__author__ = 'Fernando Serena'
 
 log = logging.getLogger('agora.planner.plan')
 

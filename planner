@@ -23,13 +23,14 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
-__author__ = 'Fernando Serena'
-
 from agora.planner.server import app
 import logging
 import os
 
 from agora.planner import api
+
+__author__ = 'Fernando Serena'
+
 
 log_level = os.environ.get('LOG_LEVEL')
 if log_level is None:

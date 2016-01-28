@@ -22,14 +22,16 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
-__author__ = 'Fernando Serena'
-
-from agora.planner.plan.fountain import Fountain
-from agora.planner.server import app
-from agora.planner.plan.agp import AgoraGP
-from rdflib import RDF, BNode, Literal
-from agora.planner.plan.graph import graph_plan
 import logging
+
+from rdflib import RDF, BNode, Literal
+
+from agora.planner.plan.agp import AgoraGP
+from agora.planner.plan.fountain import Fountain
+from agora.planner.plan.graph import graph_plan
+from agora.planner.server import app
+
+__author__ = 'Fernando Serena'
 
 log = logging.getLogger('agora.planner.plan')
 

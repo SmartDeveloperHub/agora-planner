@@ -22,13 +22,15 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
-__author__ = 'Fernando Serena'
+import logging
+import re
 from collections import namedtuple
 from urlparse import urlparse
-from rdflib import ConjunctiveGraph, URIRef, BNode, RDF, Literal
+
 import networkx as nx
-import re
-import logging
+from rdflib import ConjunctiveGraph, URIRef, BNode, RDF, Literal
+
+__author__ = 'Fernando Serena'
 
 log = logging.getLogger('agora.planner.plan')
 
