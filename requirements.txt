@@ -4,4 +4,3 @@ rdflib
 rdflib-jsonld
 requests
 networkx
-Agora-Client

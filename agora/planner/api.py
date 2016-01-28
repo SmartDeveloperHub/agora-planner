@@ -25,11 +25,10 @@
 import base64
 import json
 
-from flask import request, make_response, jsonify, render_template, Response
+from flask import request, make_response, jsonify, render_template
 from flask_negotiate import produces
 from rdflib import RDF
 
-from agora.client.execution import PlanExecutor
 from agora.planner.plan import Plan
 from agora.planner.plan.graph import AGORA
 from agora.planner.server import app
@@ -189,31 +188,3 @@ def get_plan():
     response = make_response(plan.graph.serialize(format='turtle'))
     response.headers['Content-Type'] = 'text/turtle'
     return response
-
-
-@app.route('/fragment')
-def get_fragment():
-    def get_triples():
-        for prefix, uri in ns:
-            yield '@prefix {}: <{}> .\n'.format(prefix, uri)
-        yield '\n'
-        for (_, s, p, o) in gen:
-            yield u'{} {} {} .\n'.format(s.n3(graph.namespace_manager), p.n3(graph.namespace_manager),
-                                         o.n3(graph.namespace_manager))
-
-    gp_str = request.args.get('gp', '{}')
-    plan = Plan(gp_str)
-    executor = PlanExecutor(plan.graph)
-    gen, ns, graph = executor.get_fragment_generator(queue_wait=1)
-    return Response(get_triples(), mimetype='text/n3')
-
-
-@app.route('/sparql')
-def query_fragment():
-    q_str = request.args.get('q', None)
-    pattern = q_str[q_str.find('{'):]
-    plan = Plan(pattern.lstrip().rstrip())
-    executor = PlanExecutor(plan.graph)
-    fragment = executor.get_fragment()
-    result = fragment.query(q_str)
-    return jsonify({"result": list(result)})
