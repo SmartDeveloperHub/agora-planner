@@ -42,7 +42,7 @@ setup(
     download_url="https://github.com/smartdeveloperhub/agora-planner/tarball/0.3.5-alpha1",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     namespace_packages=['agora.planner'],
-    install_requires=['flask', 'Flask-Negotiate', 'requests', 'rdflib', 'networkx', 'Agora-Client'],
+    install_requires=['flask', 'Flask-Negotiate', 'requests', 'rdflib', 'networkx'],
     classifiers=[],
     scripts=['planner'],
     package_dir={'agora.planner': 'agora/planner', 'agora.planner.server': 'agora/planner/server'},

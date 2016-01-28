@@ -33,14 +33,14 @@ log = logging.getLogger('agora.planner.plan')
 
 
 class Fountain(object):
-    def __init__(self, host):
-        self.__fountain_host = host
+    def __init__(self, host='localhost', port=5002):
+        self.__fountain_url = 'http://{}:{}'.format(host, port)
         self.__types = {}
         self.__properties = {}
 
     def __send_request(self, path):
         try:
-            response = requests.get(urlparse.urljoin(self.__fountain_host, path))
+            response = requests.get(urlparse.urljoin(self.__fountain_url, path))
             if response.status_code != 200:
                 raise IOError(response.json())
             return response.json()

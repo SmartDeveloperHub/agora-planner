@@ -37,7 +37,7 @@ log = logging.getLogger('agora.planner.plan')
 
 
 def make_fountain():
-    return Fountain(app.config['FOUNTAIN'])
+    return Fountain(**app.config['FOUNTAIN'])
 
 
 def _stringify_tp(context, (s, p, o)):

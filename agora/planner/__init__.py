@@ -25,7 +25,7 @@
 import pkg_resources
 
 __author__ = 'Fernando Serena'
-__version__ = '0.3.5-alpha2'
+__version__ = '0.3.5-alpha4'
 __description__ = 'The Agora core service that provides search plans for graph patterns'
 __email__ = 'fernando.serena@centeropenmiddleware.com'
 __github__ = 'https://github.com/SmartDeveloperHub/agora-planner'
