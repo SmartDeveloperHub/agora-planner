@@ -22,13 +22,14 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
+import json
+
 from setuptools import setup, find_packages
-import re
 
 __author__ = 'Fernando Serena'
 
-module_file = open("agora/planner/__init__.py").read()
-metadata = dict(re.findall("__([a-z]+)__\s*=\s*'([^']+)'", module_file))
+with open("agora/planner/metadata.json", 'r') as stream:
+    metadata = json.load(stream)
 
 setup(
     name="Agora-Planner",
@@ -46,5 +47,5 @@ setup(
     classifiers=[],
     scripts=['planner'],
     package_dir={'agora.planner': 'agora/planner', 'agora.planner.server': 'agora/planner/server'},
-    package_data={'agora.planner.server': ['templates/*.*', 'static/*.*']},
+    package_data={'agora.planner.server': ['templates/*.*', 'static/*.*'], 'agora.planner': ['metadata.json']},
 )

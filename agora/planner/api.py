@@ -24,16 +24,21 @@
 
 import base64
 import json
+import os
 
 from flask import request, make_response, jsonify, render_template
 from flask_negotiate import produces
 from rdflib import RDF
 
+import agora.planner
 from agora.planner.plan import Plan
 from agora.planner.plan.graph import AGORA
 from agora.planner.server import app
 
 __author__ = 'Fernando Serena'
+
+with open(os.path.join(agora.planner.__path__[0], 'metadata.json'), 'r') as stream:
+    metadata = json.load(stream)
 
 
 class APIError(Exception):
@@ -67,6 +72,11 @@ def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
+
+
+@app.route('/api')
+def get_api():
+    return jsonify({'meta': metadata})
 
 
 @app.route('/plan')

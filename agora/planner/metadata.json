@@ -1,0 +1,7 @@
+{
+  "version": "0.3.6",
+  "author": "Fernando Serena",
+  "email": "fernando.serena@centeropenmiddleware.com",
+  "github": "https://github.com/smartdeveloperhub/agora-planner",
+  "description": "The Agora core service that provides search plans for graph patterns"
+}
