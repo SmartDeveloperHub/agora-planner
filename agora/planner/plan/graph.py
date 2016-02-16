@@ -120,11 +120,13 @@ def graph_plan(plan, fountain):
 
         if isinstance(sub, BNode):
             __add_variable(pattern_node, str(sub))
+        elif isinstance(sub, URIRef):
+            plan_graph.add((pattern_node, AGORA.subject, sub))
 
         if isinstance(obj, BNode):
             __add_variable(pattern_node, str(obj), subject=False)
         elif isinstance(obj, Literal):
-            node = BNode(str(obj))
+            node = BNode(str(obj).replace(' ', ''))
             plan_graph.add((pattern_node, AGORA.object, node))
             plan_graph.set((node, RDF.type, AGORA.Literal))
             plan_graph.set((node, AGORA.value, Literal(str(obj), datatype=XSD.string)))
