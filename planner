@@ -34,7 +34,9 @@ if log_level is None:
     log_level = app.config['LOG']
 
 ch = logging.StreamHandler()
-formatter = logging.Formatter(app.debug_log_format)
+line_div = '-' * 80
+formatter = logging.Formatter(line_div +
+                              '\n%(levelname)s in %(module)s [%(pathname)s:%(lineno)d]:\n%(message)s\n' + line_div)
 ch.setFormatter(formatter)
 ch.setLevel(log_level)
 logger = logging.getLogger('agora')
